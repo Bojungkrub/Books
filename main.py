@@ -66,27 +66,24 @@ async def select_query():
 # add new book
 @app.post("/books")
 async def insert_book(book: Book):
-    book_name = book.dict().get("title")
-    book_desc = book.dict().get("description")
     # Insert
     run_sql(
         sql_statement="INSERT INTO books (title, description) VALUES (?, ?)",
-        value=(book_name, book_desc)
+        value=(book.title, book.description)
     )
     return {
-        "name": book_name,
-        "desc": book_desc,
+        "name": book.title,
+        "desc": book.description,
     }
 
 
 # edit book name form id
 @app.patch("/books/{id}")
 async def update_book(id: int, book: Book):
-    book_name = book.dict().get("title")
     # update
     run_sql(
         sql_statement="UPDATE books SET title = ? WHERE id = ?",
-        value=(book_name, id)
+        value=(book.title, id)
     )
     return {
         "msg": f"edit book id:{id} completed"
